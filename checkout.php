@@ -32,22 +32,22 @@ if (isset($_POST["checkout"])) {
 
 if (isset($_POST["hapus"])) {
 	$orderidd = $fetc['orderid'];
-	$h1 = mysqli_query($conn, "DELETE FROM cart WHERE orderid='$orderidd'");
-	$h2 = mysqli_query($conn, "DELETE FROM detailorder WHERE orderid='$orderidd'");
 	$stok = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `detailorder` WHERE `orderid` = '$orderidd'"));
-	die(var_dump($stok));
+	// die(var_dump($stok));
 	$fetchStok = $stok['qty'];
 	$fetchIDProduct = $stok['idproduk'];
 
 	$stokProduct = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM `produk` WHERE `idproduk` = '$fetchIDProduct'"));
 	$stokSaatIni = $stokProduct['stok'] + $fetchStok;
 	$updateStokProduct = mysqli_query($conn, "UPDATE `produk` SET `stok`='$stokSaatIni' WHERE `idproduk`='$fetchIDProduct'");
+	$h1 = mysqli_query($conn, "DELETE FROM cart WHERE orderid='$orderidd'");
+	$h2 = mysqli_query($conn, "DELETE FROM detailorder WHERE orderid='$orderidd'");
 	// $updateProduk = mysqli_query($conn, "UPDATE produk WHERE idproduk='$idproduk'");
 	if ($h1 && $h2) {
 		echo "
 			<script>
 				alert('Pembelian dibatalkan');
-				window.location.href='';
+				window.location.href='index.php';
 			</script>
 		";
 	} else {
