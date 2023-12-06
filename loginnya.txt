@@ -1,0 +1,7 @@
+admin
+u:admin
+p:admin
+
+guest
+u:guest
+p:guest
