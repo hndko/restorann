@@ -22,7 +22,7 @@ if (isset($_POST['confirm'])) {
 
 	if ($fetch > 0) {
 		$nama = $_POST['nama'];
-		$metode = $_POST['metode'] . "-" . $_POST['norek'];
+		$metode = $_POST['metode'];
 		$tanggal = $_POST['tanggal'];
 
 		$kon = mysqli_query($conn, "INSERT INTO `konfirmasi` VALUES (NULL,'$idorder','$userid','$nama','$metode','$tanggal',CURRENT_TIMESTAMP)");
@@ -237,7 +237,7 @@ if (isset($_POST['confirm'])) {
 					<input type="text" name="nama" placeholder="Nama Pemilik Rekening / Sumber Dana" required>
 					<br>
 					<h6>Rekening Tujuan</h6>
-					<select name="metode" class="form-control">
+					<select name="metode" class="form-control" required>
 
 						<?php
 						$metode = mysqli_query($conn, "select * from pembayaran");
@@ -252,7 +252,7 @@ if (isset($_POST['confirm'])) {
 					</select>
 					<br>
 					<h6>Tanggal Bayar</h6>
-					<input type="date" class="form-control" name="tanggal">
+					<input type="date" class="form-control" name="tanggal" required>
 					<input type="submit" name="confirm" value="Kirim">
 				</form>
 			</div>

@@ -10,6 +10,7 @@ if (isset($_POST['addprod'])) {
 	if (!isset($_SESSION['log'])) {
 		header('location:login.php');
 	} else {
+
 		$ui = $_SESSION['id'];
 		$cek = mysqli_query($conn, "select * from cart where userid='$ui' and status='Cart'");
 		$liat = mysqli_num_rows($cek);
@@ -27,7 +28,7 @@ if (isset($_POST['addprod'])) {
 
 			//kalo ternyata barangnya ud ada
 			if ($liatlg > 0) {
-				$i = 1;
+				$i = $_POST['qtyItem'];
 				$baru = $jmlh + $i;
 
 				$updateaja = mysqli_query($conn, "update detailorder set qty='$baru' where orderid='$orid' and idproduk='$idproduk'");
@@ -44,8 +45,8 @@ if (isset($_POST['addprod'])) {
 						  <meta http-equiv='refresh' content='1; url= product.php?idproduk=" . $idproduk . "'/>";
 				}
 			} else {
-
-				$tambahdata = mysqli_query($conn, "insert into detailorder (orderid,idproduk,qty) values('$orid','$idproduk','1')");
+				$qtyItem = $_POST['qtyItem'];
+				$tambahdata = mysqli_query($conn, "insert into detailorder (orderid,idproduk,qty) values('$orid','$idproduk','$qtyItem')");
 				if ($tambahdata) {
 					echo " <div class='alert alert-success'>
 							Berhasil menambahkan ke keranjang
@@ -68,7 +69,8 @@ if (isset($_POST['addprod'])) {
 			$bikincart = mysqli_query($conn, "insert into cart (orderid, userid) values('$oi','$ui')");
 
 			if ($bikincart) {
-				$tambahuser = mysqli_query($conn, "insert into detailorder (orderid,idproduk,qty) values('$oi','$idproduk','1')");
+				$qtyItem = $_POST['qtyItem'];
+				$tambahuser = mysqli_query($conn, "insert into detailorder (orderid,idproduk,qty) values('$oi','$idproduk','$qtyItem')");
 				if ($tambahuser) {
 					echo " <div class='alert alert-success'>
 							Berhasil menambahkan ke keranjang
@@ -207,188 +209,190 @@ if (isset($_POST['addprod'])) {
 						<p><?php echo $p['deskripsi'] ?></p>
 					</div>
 					<div class="snipcart-item block">
-						<div class="snipcart-thumb agileinfo_single_right_snipcart">
-							<h4 class="m-sing">Rp<?php echo number_format($p['hargaafter']) ?> <span>Rp<?php echo number_format($p['hargabefore']) ?></span></h4>
-						</div>
-						<div class="snipcart-item block">
+						<form action="#" method="post">
 							<div class="snipcart-thumb agileinfo_single_right_snipcart">
-								<h4 class="m-sing">Stok <?php echo number_format($p['stok']) ?> Porsi</h4>
+								<h4 class="m-sing">Rp<?php echo number_format($p['hargaafter']) ?> <span>Rp<?php echo number_format($p['hargabefore']) ?></span></h4>
 							</div>
-							<div class="snipcart-details agileinfo_single_right_details">
-								<form action="#" method="post">
+							<div class="snipcart-item block">
+								<div class="snipcart-thumb agileinfo_single_right_snipcart">
+									<h4 class="m-sing">Stok <?php echo number_format($p['stok']) ?> Porsi
+										<span><input type="number" name="qtyItem" id="qtyItem" min="1" max="<?= $p['stok'] ?>" value="1" style="width: 50px;"></span>
+									</h4>
+								</div>
+								<div class="snipcart-details agileinfo_single_right_details">
 									<fieldset>
 										<input type="hidden" name="idprod" value="<?php echo $idproduk ?>">
 										<input type="submit" name="addprod" value="Beli" class="button">
 									</fieldset>
-								</form>
-							</div>
-						</div>
+								</div>
+						</form>
 					</div>
+				</div>
 
-					<!-- RATING -->
-					<div role="tabpanel" class="tab-pane fade in active" id="expeditions" aria-labelledby="expeditions-tab">
-						<div class="agile-tp">
-							<h2>Ulasan</h2>
-						</div>
-						<div class="agile_top_brands_grids">
+				<!-- RATING -->
+				<div role="tabpanel" class="tab-pane fade in active" id="expeditions" aria-labelledby="expeditions-tab">
+					<div class="agile-tp">
+						<h2>Ulasan</h2>
+					</div>
+					<div class="agile_top_brands_grids">
 
-							<?php
+						<?php
 
-							// $query3 = mysqli_query($conn, "SELECT * FROM tbl_disposisi JOIN tbl_surat_masuk ON tbl_disposisi.id_surat = tbl_surat_masuk.id_surat WHERE tbl_disposisi.id_surat='$id_surat'");
-							// $nama = mysqli_query($conn, "SELECT * FROM rating JOIN login ON rating.userid = login.namalengkap");
-							$brgs = mysqli_query($conn, "SELECT * FROM rating WHERE idproduk = $idproduk");
-							// $brgs = mysqli_query($conn,"SELECT * FROM hasil JOIN alternatif ON hasil.id_alternatif=alternatif.id_alternatif ORDER BY hasil.nilai DESC");
-							// $brgs = mysqli_query($conn,"SELECT * FROM rating JOIN login ON rating.userid=login.namalengkap");
-							$no = 1;
-							while ($p = mysqli_fetch_array($brgs)) {
-								$iduser = $p['userid'];
-							?>
-								<div style="margin-top: 20px;" class="col-md-4 top_brand_left">
-									<div class="hover14 column">
-										<div class="agile_top_brand_left_grid">
-											<div class="agile_top_brand_left_grid_pos">
-											</div>
-											<div class="agile_top_brand_left_grid1">
-												<figure>
-													<div class="snipcart-item block">
-														<div class="snipcart-thumb">
+						// $query3 = mysqli_query($conn, "SELECT * FROM tbl_disposisi JOIN tbl_surat_masuk ON tbl_disposisi.id_surat = tbl_surat_masuk.id_surat WHERE tbl_disposisi.id_surat='$id_surat'");
+						// $nama = mysqli_query($conn, "SELECT * FROM rating JOIN login ON rating.userid = login.namalengkap");
+						$brgs = mysqli_query($conn, "SELECT * FROM rating WHERE idproduk = $idproduk");
+						// $brgs = mysqli_query($conn,"SELECT * FROM hasil JOIN alternatif ON hasil.id_alternatif=alternatif.id_alternatif ORDER BY hasil.nilai DESC");
+						// $brgs = mysqli_query($conn,"SELECT * FROM rating JOIN login ON rating.userid=login.namalengkap");
+						$no = 1;
+						while ($p = mysqli_fetch_array($brgs)) {
+							$iduser = $p['userid'];
+						?>
+							<div style="margin-top: 20px;" class="col-md-4 top_brand_left">
+								<div class="hover14 column">
+									<div class="agile_top_brand_left_grid">
+										<div class="agile_top_brand_left_grid_pos">
+										</div>
+										<div class="agile_top_brand_left_grid1">
+											<figure>
+												<div class="snipcart-item block">
+													<div class="snipcart-thumb">
+														<?php
+														$nama = mysqli_query($conn, "SELECT * FROM login WHERE userid = $iduser");
+														while ($q = mysqli_fetch_array($nama)) {
+
+														?>
+															<p style="text-align: left;"><?php echo $q['namalengkap']; ?></p>
+														<?php } ?>
+														<div class="stars">
 															<?php
-															$nama = mysqli_query($conn, "SELECT * FROM login WHERE userid = $iduser");
-															while ($q = mysqli_fetch_array($nama)) {
+															$bintang = '<i class="fa fa-star blue-star" aria-hidden="true"></i>';
+															$rate = $p['rating'];
 
+															for ($n = 1; $n <= $rate; $n++) {
+																echo '<i class="fa fa-star blue-star" aria-hidden="true"></i>';
+															};
 															?>
-																<p style="text-align: left;"><?php echo $q['namalengkap']; ?></p>
-															<?php } ?>
-															<div class="stars">
-																<?php
-																$bintang = '<i class="fa fa-star blue-star" aria-hidden="true"></i>';
-																$rate = $p['rating'];
-
-																for ($n = 1; $n <= $rate; $n++) {
-																	echo '<i class="fa fa-star blue-star" aria-hidden="true"></i>';
-																};
-																?>
-															</div>
-															<h4 style="text-align: left;">Ulasan Produk <br><br></h4>
-															<?php echo $p['ulasan'] ?>
 														</div>
-
+														<h4 style="text-align: left;">Ulasan Produk <br><br></h4>
+														<?php echo $p['ulasan'] ?>
 													</div>
-												</figure>
-											</div>
+
+												</div>
+											</figure>
 										</div>
 									</div>
 								</div>
-							<?php
-							}
-							?>
+							</div>
+						<?php
+						}
+						?>
 
 
-							<div class="clearfix"> </div>
-						</div>
+						<div class="clearfix"> </div>
 					</div>
-					<!-- END RATING -->
-
-
-					<div class="clearfix"> </div>
 				</div>
+				<!-- END RATING -->
+
+
+				<div class="clearfix"> </div>
 			</div>
 		</div>
+	</div>
 
-		<!-- //footer -->
-		<div class="footer">
-			<div class="container">
-				<div class="w3_footer_grids">
-					<div class="col-md-4 w3_footer_grid">
-						<h3>Hubungi Kami</h3>
+	<!-- //footer -->
+	<div class="footer">
+		<div class="container">
+			<div class="w3_footer_grids">
+				<div class="col-md-4 w3_footer_grid">
+					<h3>Hubungi Kami</h3>
 
-						<ul class="address">
-							<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Depot Moro Seneng</li>
-							<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@email">info@email</a></li>
-							<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i><a href="https://wa.me/6281132322" target="_blank">+62 8113 2322</a></li>
-						</ul>
-					</div>
-					<div class="col-md-3 w3_footer_grid">
-						<h3>Tentang Kami</h3>
-						<ul class="info">
-							<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">About Us</a></li>
-							<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">How To</a></li>
-							<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">FAQ</a></li>
-						</ul>
-					</div>
-					<div class="clearfix"> </div>
-				</div>
-			</div>
-
-			<div class="footer-copy">
-
-				<div class="container">
-					<p>© 2023 Depot Moro Seneng. All rights reserved</p>
-				</div>
-			</div>
-
-		</div>
-		<div class="footer-botm">
-			<div class="container">
-				<div class="w3layouts-foot">
-					<ul>
-						<li><a href="#" class="w3_agile_instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-						<li><a href="#" class="w3_agile_facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-						<li><a href="#" class="agile_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+					<ul class="address">
+						<li><i class="glyphicon glyphicon-map-marker" aria-hidden="true"></i>Depot Moro Seneng</li>
+						<li><i class="glyphicon glyphicon-envelope" aria-hidden="true"></i><a href="mailto:info@email">info@email</a></li>
+						<li><i class="glyphicon glyphicon-earphone" aria-hidden="true"></i><a href="https://wa.me/6281132322" target="_blank">+62 8113 2322</a></li>
 					</ul>
 				</div>
-				<div class="payment-w3ls">
-					<img src="images/card.png" alt=" " class="img-responsive">
+				<div class="col-md-3 w3_footer_grid">
+					<h3>Tentang Kami</h3>
+					<ul class="info">
+						<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">About Us</a></li>
+						<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">How To</a></li>
+						<li><i class="fa fa-arrow-right" aria-hidden="true"></i><a href="about.html">FAQ</a></li>
+					</ul>
 				</div>
 				<div class="clearfix"> </div>
 			</div>
 		</div>
-		<!-- //footer -->
-		<!-- Bootstrap Core JavaScript -->
-		<script src="js/bootstrap.min.js"></script>
 
-		<!-- top-header and slider -->
-		<!-- here stars scrolling icon -->
-		<script type="text/javascript">
-			$(document).ready(function() {
+		<div class="footer-copy">
 
-				var defaults = {
-					containerID: 'toTop', // fading element id
-					containerHoverID: 'toTopHover', // fading element hover id
-					scrollSpeed: 4000,
-					easingType: 'linear'
-				};
+			<div class="container">
+				<p>© 2023 Depot Moro Seneng. All rights reserved</p>
+			</div>
+		</div>
+
+	</div>
+	<div class="footer-botm">
+		<div class="container">
+			<div class="w3layouts-foot">
+				<ul>
+					<li><a href="#" class="w3_agile_instagram"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+					<li><a href="#" class="w3_agile_facebook"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+					<li><a href="#" class="agile_twitter"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+				</ul>
+			</div>
+			<div class="payment-w3ls">
+				<img src="images/card.png" alt=" " class="img-responsive">
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+	<!-- //footer -->
+	<!-- Bootstrap Core JavaScript -->
+	<script src="js/bootstrap.min.js"></script>
+
+	<!-- top-header and slider -->
+	<!-- here stars scrolling icon -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+
+			var defaults = {
+				containerID: 'toTop', // fading element id
+				containerHoverID: 'toTopHover', // fading element hover id
+				scrollSpeed: 4000,
+				easingType: 'linear'
+			};
 
 
-				$().UItoTop({
-					easingType: 'easeOutQuart'
-				});
-
+			$().UItoTop({
+				easingType: 'easeOutQuart'
 			});
-		</script>
-		<!-- //here ends scrolling icon -->
 
-		<!-- main slider-banner -->
-		<script src="js/skdslider.min.js"></script>
-		<link href="css/skdslider.css" rel="stylesheet">
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				jQuery('#demo1').skdslider({
-					'delay': 5000,
-					'animationSpeed': 2000,
-					'showNextPrev': true,
-					'showPlayButton': true,
-					'autoSlide': true,
-					'animationType': 'fading'
-				});
+		});
+	</script>
+	<!-- //here ends scrolling icon -->
 
-				jQuery('#responsive').change(function() {
-					$('#responsive_wrapper').width(jQuery(this).val());
-				});
-
+	<!-- main slider-banner -->
+	<script src="js/skdslider.min.js"></script>
+	<link href="css/skdslider.css" rel="stylesheet">
+	<script type="text/javascript">
+		jQuery(document).ready(function() {
+			jQuery('#demo1').skdslider({
+				'delay': 5000,
+				'animationSpeed': 2000,
+				'showNextPrev': true,
+				'showPlayButton': true,
+				'autoSlide': true,
+				'animationType': 'fading'
 			});
-		</script>
-		<!-- //main slider-banner -->
+
+			jQuery('#responsive').change(function() {
+				$('#responsive_wrapper').width(jQuery(this).val());
+			});
+
+		});
+	</script>
+	<!-- //main slider-banner -->
 </body>
 
 </html>
