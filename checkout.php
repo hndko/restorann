@@ -7,7 +7,7 @@ if (!isset($_SESSION['log'])) {
 } else {
 };
 $uid = $_SESSION['id'];
-$caricart = mysqli_query($conn, "SELECT * FROM `cart` WHERE `userid` = '$uid'");
+$caricart = mysqli_query($conn, "SELECT * FROM `cart` WHERE `userid` = '$uid' AND `status` = 'Cart'");
 $fetc = mysqli_fetch_array($caricart);
 $orderidd = $fetc['orderid'];
 $itungtrans = mysqli_query($conn, "SELECT COUNT(`detailid`) as `jumlahtrans` FROM `detailorder` WHERE `orderid` = '$orderidd'");
@@ -205,8 +205,6 @@ if (isset($_POST["hapus"])) {
 							<th>Produk</th>
 							<th>Nama Produk</th>
 							<th>Jumlah</th>
-
-
 							<th>Sub Total</th>
 							<th>Opsi</th>
 						</tr>

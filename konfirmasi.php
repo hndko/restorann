@@ -12,7 +12,7 @@ include 'dbconnect.php';
 if (isset($_POST['confirm'])) {
 
 	$userid = $_SESSION['id'];
-	$veriforderid = mysqli_query($conn, "select * from cart where orderid='$idorder'");
+	$veriforderid = mysqli_query($conn, "SELECT * FROM `cart` WHERE `orderid` = '$idorder'");
 	$fetch = mysqli_fetch_array($veriforderid);
 
 	// Cek Nilai Value dari $fetc
@@ -27,25 +27,28 @@ if (isset($_POST['confirm'])) {
 
 		$kon = mysqli_query($conn, "INSERT INTO `konfirmasi` VALUES (NULL,'$idorder','$userid','$nama','$metode','$tanggal',CURRENT_TIMESTAMP)");
 		if ($kon) {
-
-			$up = mysqli_query($conn, "update cart set status='Menunggu Verifikasi Pembayaran' where orderid='$idorder'");
-
-			echo " <div class='alert alert-success'>
-			Terima kasih telah melakukan konfirmasi, team kami akan melakukan verifikasi.
-			Informasi selanjutnya akan dikirim via Email
-		  </div>
-		<meta http-equiv='refresh' content='7; url= index.php'/>  ";
+			$up = mysqli_query($conn, "UPDATE `cart` SET `status`='Menunggu Verifikasi Pembayaran' WHERE `orderid` = '$idorder'");
+			echo "
+				<script>
+					alert('Terima kasih telah melakukan konfirmasi, team kami akan melakukan verifikasi. Informasi selanjutnya akan dikirim via Email');
+					window.location.href='daftarorder.php';
+				</script>
+			";
 		} else {
-			echo "<div class='alert alert-warning'>
-			Gagal Submit, silakan ulangi lagi.
-		  </div>
-		 <meta http-equiv='refresh' content='3; url= konfirmasi.php?id=" . $idorder . "'/> ";
+			echo "
+				<script>
+					alert('Gagal Submit, silakan ulangi lagi.');
+					window.location.href='';
+				</script>
+			";
 		}
 	} else {
-		echo "<div class='alert alert-danger'>
-			Kode Order tidak ditemukan, harap masukkan kembali dengan benar
-		  </div>
-		 <meta http-equiv='refresh' content='4; url= konfirmasi.php?id=" . $idorder . "'/> ";
+		echo "
+			<script>
+				alert('Terima kasih telah melakukan konfirmasi, team kami akan melakukan verifikasi. Informasi selanjutnya akan dikirim via Email');
+				window.location.href='daftarorder.php';
+			</script>
+		";
 	}
 };
 
