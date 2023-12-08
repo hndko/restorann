@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 06, 2023 at 09:29 AM
+-- Generation Time: Dec 08, 2023 at 06:38 AM
 -- Server version: 8.0.30
--- PHP Version: 8.2.9
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,9 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`idcart`, `orderid`, `userid`, `tglorder`, `status`) VALUES
-(74, '17Axx0NIeDPw6', 1, '2023-12-06 09:00:57', 'Cart');
+(83, '17TVhLzPtjINY', 1, '2023-12-06 09:59:54', 'Payment'),
+(84, '17dFygUORHAY2', 2, '2023-12-08 06:37:30', 'Payment'),
+(85, '17kaW8fTE6srg', 2, '2023-12-08 06:37:43', 'Menunggu Verifikasi Pembayaran');
 
 -- --------------------------------------------------------
 
@@ -60,7 +62,9 @@ CREATE TABLE `detailorder` (
 --
 
 INSERT INTO `detailorder` (`detailid`, `orderid`, `idproduk`, `qty`) VALUES
-(93, '17Axx0NIeDPw6', 21, 1);
+(102, '17TVhLzPtjINY', 21, 1),
+(103, '17dFygUORHAY2', 21, 1),
+(104, '17kaW8fTE6srg', 21, 1);
 
 --
 -- Triggers `detailorder`
@@ -147,7 +151,8 @@ CREATE TABLE `konfirmasi` (
 
 INSERT INTO `konfirmasi` (`idkonfirmasi`, `orderid`, `userid`, `namarekening`, `norek`, `tglbayar`, `tglsubmit`) VALUES
 (18, '17p0s3Mvby6fU', 1, 'Joko Sutonso', 'Bank BCA', '2023-12-06', '2023-12-06 07:20:32'),
-(19, '17p0s3Mvby6fU', 1, 'Joko Sutonso', 'Bank BCA-', '2023-12-06', '2023-12-06 07:22:21');
+(19, '17p0s3Mvby6fU', 1, 'Joko Sutonso', 'Bank BCA-', '2023-12-06', '2023-12-06 07:22:21'),
+(23, '17kaW8fTE6srg', 2, 'Handoko', 'Bank Mandiri', '2023-12-08', '2023-12-08 06:38:03');
 
 -- --------------------------------------------------------
 
@@ -248,7 +253,7 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`idproduk`, `idkategori`, `namaproduk`, `gambar`, `deskripsi`, `stok`, `rate`, `hargabefore`, `hargaafter`, `tgldibuat`) VALUES
-(21, 9, 'Seafood 01', 'produk/17xGoe7C2X33o.png', 'Seafood 01', '8', 3, 150000, 145000, '2023-12-06 03:41:03');
+(21, 9, 'Seafood 01', 'produk/17xGoe7C2X33o.png', 'Seafood 01', '6', 3, 150000, 145000, '2023-12-06 03:41:03');
 
 -- --------------------------------------------------------
 
@@ -271,7 +276,8 @@ CREATE TABLE `rating` (
 --
 
 INSERT INTO `rating` (`idrating`, `orderid`, `idproduk`, `userid`, `rating`, `ulasan`, `tanggal`) VALUES
-(19, '16VrPDLG6HTmY', 9, 2, 1, 'Ban nya 4', '2023-08-11');
+(19, '16VrPDLG6HTmY', 9, 2, 1, 'Ban nya 4', '2023-08-11'),
+(20, '17I6JSzW081U6', 21, 1, 5, 'test', '2023-12-06');
 
 --
 -- Indexes for dumped tables
@@ -351,13 +357,13 @@ ALTER TABLE `rating`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `idcart` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `idcart` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `detailorder`
 --
 ALTER TABLE `detailorder`
-  MODIFY `detailid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `detailid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT for table `kategori`
@@ -375,7 +381,7 @@ ALTER TABLE `komplain`
 -- AUTO_INCREMENT for table `konfirmasi`
 --
 ALTER TABLE `konfirmasi`
-  MODIFY `idkonfirmasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `idkonfirmasi` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `login`
@@ -405,7 +411,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `rating`
 --
 ALTER TABLE `rating`
-  MODIFY `idrating` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `idrating` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
